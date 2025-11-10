@@ -127,24 +127,6 @@ env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ----------------------------------------------------------------
 
-## Pushing to GitHub (SSH, macOS)
-
-# (once) generate an SSH key and add it to GitHub
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-pbcopy < ~/.ssh/id_ed25519.pub  # paste into GitHub → Settings → SSH and GPG keys
-
-# add remote & push
-git remote add origin git@github.com:munaberhe/exomiser-hpo-workflows.git
-git push -u origin main
-
-# optional: tag a release
-git tag -a v0.1.0 -m "First public demo release"
-git push origin v0.1.0
-
-----------------------------------------------------------------
-
 ## Repository layout
 
 exomiser-hpo-workflows/

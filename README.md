@@ -155,7 +155,7 @@ Current landing page links:
 
 ## Repository layout
 
-exomiser-hpo-workflows/
+```exomiser-hpo-workflows/
 ├─ cases/
 │  ├─ case01_hcm/
 │  │  └─ exomiser.yml                 # HCM job (assembly must match VCF)
@@ -186,6 +186,7 @@ exomiser-hpo-workflows/
 ├─ LICENSE
 ├─ CITATION.cff
 └─ README.md
+```
 
 ----------------------------------------------------------------
 
@@ -256,24 +257,6 @@ outputOptions:
   outputDirectory: /absolute/path/to/outputs/case02_epilepsy
   outputFilename: case02_epilepsy.vep-exomiser
   outputFormats: [HTML, JSON, TSV_GENE, TSV_VARIANT]
-
-----------------------------------------------------------------
-
-## Pushing to GitHub (SSH, macOS)
-
-# (once) generate an SSH key and add it to GitHub
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-pbcopy < ~/.ssh/id_ed25519.pub  # paste into GitHub → Settings → SSH and GPG keys
-
-# add remote & push
-git remote add origin git@github.com:munaberhe/exomiser-hpo-workflows.git
-git push -u origin main
-
-# optional: tag a release
-git tag -a v0.1.0 -m "First public demo release"
-git push origin v0.1.0
 
 ----------------------------------------------------------------
 

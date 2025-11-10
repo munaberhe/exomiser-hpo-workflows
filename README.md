@@ -129,7 +129,7 @@ env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ## Repository layout
 
-exomiser-hpo-workflows/
+'''exomiser-hpo-workflows/
 ├─ cases/
 │  ├─ case01_hcm/
 │  │  └─ exomiser.yml                 # HCM job (GRCh38 VCF expected)
@@ -146,7 +146,7 @@ exomiser-hpo-workflows/
 ├─ run_exomiser_hcm.sh                # wrapper for HCM job
 ├─ run_exomiser_epilepsy.sh           # wrapper for epilepsy job
 ├─ .gitignore
-└─ README.md
+└─ README.md'''
 
 ----------------------------------------------------------------
 

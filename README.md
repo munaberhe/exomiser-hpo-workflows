@@ -3,15 +3,13 @@
 Reproducible Exomiser + HPO workflows to prioritise variants from VEP-annotated VCFs.
 
 This repo ships two demo analyses:
-- Hypertrophic cardiomyopathy (HCM) — HP:0001639, HP:0001671 (expects GRCh38 VCF)
+- Hypertrophic cardiomyopathy (HCM) — HP:0001639, HP:0001671 (expects GRCh38 or GRCh37 VCF; set accordingly)
 - Epilepsy / neurodevelopment — HP:0001250, HP:0001263, HP:0000252 (expects GRCh37 VCF)
 
 Outputs include a human-friendly HTML report plus TSV (genes & variants) and JSON for downstream use.
-Live Pages (if enabled): 
-- HCM report: https://munaberhe.github.io/exomiser-hpo-workflows/hcm-report.html
-- Epilepsy report: https://munaberhe.github.io/exomiser-hpo-workflows/epilepsy-report.html
 
 ----------------------------------------------------------------
+
 ## Requirements
 
 - Java 17+ (Java 21 tested)
@@ -19,7 +17,9 @@ Live Pages (if enabled):
 
   Example layout:
   - ~/tools/exomiser/exomiser-cli-14.0.1.jar
-  - data directories like ~/tools/exomiser/data/2406_hg19 and/or ~/tools/exomiser/data/2406_hg38
+  - data directories like:
+    - ~/tools/exomiser/data/2406_hg19
+    - ~/tools/exomiser/data/2406_hg38
 
 - VEP-annotated VCFs, bgzipped (.vcf.gz) and tabix indexed (.tbi)
 
@@ -27,6 +27,7 @@ Live Pages (if enabled):
   env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ----------------------------------------------------------------
+
 ## Quickstart
 
 # 1) clone and enter the repo
@@ -36,10 +37,10 @@ cd exomiser-hpo-workflows
 # 2) set Exomiser path (adjust if needed)
 export EXOMISER_HOME="$HOME/tools/exomiser"
 
-# 3) run the HCM demo (expects a GRCh38 VCF path inside cases/case01_hcm/exomiser.yml)
+# 3) run the HCM demo (expects a GRCh38/GRCh37 VCF path set inside cases/case01_hcm/exomiser.yml)
 bash run_exomiser_hcm.sh
 
-# 4) run the epilepsy demo (expects a GRCh37 VCF path inside cases/case02_epilepsy/exomiser.yml)
+# 4) run the epilepsy demo (expects a GRCh37 VCF path set inside cases/case02_epilepsy/exomiser.yml)
 bash run_exomiser_epilepsy.sh
 
 # 5) open the HTML reports (macOS)
@@ -47,9 +48,11 @@ open outputs/case01_hcm/*-exomiser.html
 open outputs/case02_epilepsy/*-exomiser.html
 
 ----------------------------------------------------------------
+
 ## What the jobs do
 
 Each cases/*/exomiser.yml is an Exomiser job that defines:
+
 - sample: genomeAssembly, input vcf, and HPO terms
 - preset: EXOME
 - analysis:
@@ -62,17 +65,19 @@ Each cases/*/exomiser.yml is an Exomiser job that defines:
 - outputOptions: write HTML, JSON, TSV_GENE, TSV_VARIANT into outputs/<case>/
 
 ----------------------------------------------------------------
+
 ##  Assembly matters
 
-- HCM job = GRCh38 VCF
+- HCM job = usually GRCh38 VCF (set to match your file)
 - Epilepsy job = GRCh37 VCF
 
-If your VCF uses another assembly, either liftover the VCF or change genomeAssembly and ensure the corresponding Exomiser data (2406_hg19 or 2406_hg38) are present.
+If your VCF uses another assembly, either liftover the VCF or change sample.genomeAssembly and ensure the corresponding Exomiser data (2406_hg19 or 2406_hg38) are present.
 
 ----------------------------------------------------------------
+
 ## Run manually (without the wrapper scripts)
 
-# HCM (GRCh38)
+# HCM
 java -Xms1g -Xmx6g -jar "$EXOMISER_HOME/exomiser-cli-14.0.1.jar" \
   --job="$(pwd)/cases/case01_hcm/exomiser.yml"
 
@@ -81,6 +86,7 @@ java -Xms1g -Xmx6g -jar "$EXOMISER_HOME/exomiser-cli-14.0.1.jar" \
   --job="$(pwd)/cases/case02_epilepsy/exomiser.yml"
 
 ----------------------------------------------------------------
+
 ## Outputs
 
 Each run writes to outputs/<case>/:
@@ -98,82 +104,99 @@ awk -F'\t' 'NR==1 || NR<=11' outputs/case01_hcm/*-exomiser.genes.tsv | column -t
 awk -F'\t' 'NR==1 || NR<=11' outputs/case01_hcm/*-exomiser.variants.tsv | column -t -s $'\t'
 
 ----------------------------------------------------------------
-## Customising
 
-- Change HPO terms in sample.hpoIds to match your phenotype.
-- Tighten/relax frequency via frequencyFilter.maxFrequency.
-- Switch inheritance models by editing analysis.inheritanceModes.
-- Assembly: ensure sample.genomeAssembly matches the VCF and that Exomiser data for that assembly exist.
+## Phenopackets demo → run pipeline from a phenopacket
 
-----------------------------------------------------------------
-## Troubleshooting
+This script reads HPO terms from a Phenopacket JSON (using `jq`), then runs the pipeline.
 
-### VCF / assembly mismatch
-Symptom: Error like “CoordinatesOutOfBoundsException” or “coordinates out of contig bounds”.
-Fix: Your VCF assembly doesn’t match the job’s genomeAssembly. Fix VCF (liftover) or change the job and ensure Exomiser has the corresponding 2406_hg19/2406_hg38 data.
+# example packets (already included)
+phenopackets/case_hcm.json
+phenopackets/case_epilepsy.json
 
-### YAML format errors
-- Stick to the provided examples. Keys like inheritanceModes must be maps (e.g., AUTOSOMAL_DOMINANT: 1.0), not lists.
+# runner (already included)
+tools/run_from_phenopacket.sh
 
-### Conda vs Homebrew git on macOS
-If you see dyld: Symbol not found: _iconv, call Apple Git explicitly:
-env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
+# usage
+export EXOMISER_HOME="$HOME/tools/exomiser"
+tools/run_from_phenopacket.sh phenopackets/case_hcm.json data/case01_hcm.vep.vcf.gz GRCh37
 
-----------------------------------------------------------------
-## Pushing to GitHub (SSH, macOS)
-
-# (once) generate an SSH key and add it to GitHub
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-pbcopy < ~/.ssh/id_ed25519.pub  # paste into GitHub → Settings → SSH and GPG keys
-
-# add remote & push
-git remote add origin git@github.com:munaberhe/exomiser-hpo-workflows.git
-git push -u origin main
-
-# optional: tag a release
-git tag -a v0.1.0 -m "First public demo release"
-git push origin v0.1.0
+# notes
+# - requires jq
+# - writes results under outputs/pipeline/<case_id>
 
 ----------------------------------------------------------------
+
+## SCN1A gene-centric mini-report
+
+Create a quick SCN1A summary (table + PNG) from an Exomiser variants TSV.
+
+# script (already included)
+python tools/report_scn1a.py outputs/case02_epilepsy/*-exomiser.variants.tsv docs/img
+
+# generates
+# - docs/img/scn1a_top.png   (bar chart of top 10 by Exomiser variant score)
+# - docs/img/scn1a.md        (markdown table of top 10)
+# Optional: commit and view via GitHub Pages:
+#   https://munaberhe.github.io/exomiser-hpo-workflows/img/scn1a_top.png
+
+----------------------------------------------------------------
+
+## GitHub Pages (reports)
+
+Static copies of reports can be placed under docs/ and will publish at:
+https://munaberhe.github.io/exomiser-hpo-workflows/
+
+Current landing page links:
+- HCM report: /hcm-report.html
+- Epilepsy report: /epilepsy-report.html
+- SCN1A image (if generated): /img/scn1a_top.png
+
+----------------------------------------------------------------
+
 ## Repository layout
 
 exomiser-hpo-workflows/
 ├─ cases/
 │  ├─ case01_hcm/
-│  │  └─ exomiser.yml                 # HCM job (GRCh38 VCF expected)
+│  │  └─ exomiser.yml                 # HCM job (assembly must match VCF)
 │  └─ case02_epilepsy/
 │     └─ exomiser.yml                 # Epilepsy job (GRCh37 VCF expected)
-├─ data/                               # (not tracked) place your VCFs here
-│  ├─ case01_hcm.vep.vcf.gz
-│  ├─ case01_hcm.vep.vcf.gz.tbi
-│  ├─ case02_epilepsy.vep.vcf.gz
-│  └─ case02_epilepsy.vep.vcf.gz.tbi
 ├─ outputs/
-│  ├─ case01_hcm/                      # Exomiser outputs (HTML/JSON/TSV)
-│  └─ case02_epilepsy/                 # Exomiser outputs (when run)
-├─ docs/                               # GitHub Pages site (optional)
-│  ├─ index.html
-│  ├─ hcm-report.html
-│  └─ epilepsy-report.html
-├─ pipeline/                           # (optional) mini Nextflow wrapper
+│  ├─ case01_hcm/                     # Exomiser outputs (HTML/JSON/TSV)
+│  └─ case02_epilepsy/                # Exomiser outputs (when run)
+├─ docs/
+│  ├─ hcm-report.html                 # static copy for GitHub Pages (optional)
+│  ├─ epilepsy-report.html            # static copy for GitHub Pages (optional)
+│  ├─ index.html / index.md           # Pages landing
+│  └─ img/
+│     └─ scn1a_top.png                # generated by tools/report_scn1a.py
+├─ phenopackets/
+│  ├─ case_hcm.json
+│  └─ case_epilepsy.json
+├─ tools/
+│  ├─ run_from_phenopacket.sh         # phenopacket → HPO → pipeline
+│  └─ report_scn1a.py                 # SCN1A mini-report
+├─ pipeline/                          # (optional) Nextflow wrapper
 │  ├─ main.nf
 │  └─ nextflow.config
-├─ run_exomiser_hcm.sh                 # wrapper for HCM job
-├─ run_exomiser_epilepsy.sh            # wrapper for epilepsy job
+├─ reports/                           # any extra summaries (optional)
+├─ run_exomiser_hcm.sh                # wrapper for HCM job
+├─ run_exomiser_epilepsy.sh           # wrapper for epilepsy job
 ├─ .gitignore
-└─ README.md ```
+├─ LICENSE
+├─ CITATION.cff
+└─ README.md
 
 ----------------------------------------------------------------
+
 ## Minimal example job snippets
 
-### HCM (GRCh38)
+### HCM (set genomeAssembly to match your file)
 
 sample:
   genomeAssembly: GRCh38
   vcf: /absolute/path/to/case01_hcm.vep.vcf.gz
-  hpoIds: ['HP:0001639', 'HP:0001671']   # HCM, LVOT obstruction
+  hpoIds: ['HP:0001639', 'HP:0001671']   # HCM, septal abnormality
 
 preset: EXOME
 
@@ -235,30 +258,45 @@ outputOptions:
   outputFormats: [HTML, JSON, TSV_GENE, TSV_VARIANT]
 
 ----------------------------------------------------------------
-# (Optional) Nextflow mini-pipeline
 
-- Requirements: Nextflow installed (https://www.nextflow.io), Java 17+, Exomiser 14.x
-- Configure:
-   - pipeline/nextflow.config: set params.vcf, or pass --vcf on the CLI
-   - export EXOMISER_HOME="$HOME/tools/exomiser"
-- Run example:
-   nextflow run pipeline -profile test --hpo HP:0001639,HP:0001671 --assembly GRCh38
-- Notes:
-   - Ensure params.exomiserJar is set (e.g., params.exomiserJar = "$EXOMISER_HOME/exomiser-cli-14.0.1.jar")
-   - Ensure your VCF assembly matches --assembly.
+## Pushing to GitHub (SSH, macOS)
 
-----------------------------------------------------------------
-# Phenopackets demo
+# (once) generate an SSH key and add it to GitHub
+ssh-keygen -t ed25519 -C "your_email@example.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+pbcopy < ~/.ssh/id_ed25519.pub  # paste into GitHub → Settings → SSH and GPG keys
 
-Run the pipeline directly from a Phenopacket:
- 
-export EXOMISER_HOME="$HOME/tools/exomiser"
-tools/run_from_phenopacket.sh phenopackets/case_hcm.json data/case01_hcm.vep.vcf.gz GRCh37
+# add remote & push
+git remote add origin git@github.com:munaberhe/exomiser-hpo-workflows.git
+git push -u origin main
+
+# optional: tag a release
+git tag -a v0.1.0 -m "First public demo release"
+git push origin v0.1.0
 
 ----------------------------------------------------------------
-# Citation
+
+## Troubleshooting
+
+### VCF / assembly mismatch
+Symptom: “CoordinatesOutOfBoundsException” or “coordinates out of contig bounds”.
+Fix: Your VCF assembly doesn’t match the job’s genomeAssembly. Liftover the VCF or change the job’s assembly and ensure Exomiser has the corresponding 2406_hg19/2406_hg38 data.
+
+### YAML format errors
+Stick to the provided examples. Keys like inheritanceModes must be maps (e.g., AUTOSOMAL_DOMINANT: 1.0), not lists.
+
+### Conda vs Homebrew git on macOS
+If you see: dyld: Symbol not found: _iconv  
+Use Apple Git explicitly:
+env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
+
+----------------------------------------------------------------
+
+## Citation
 
 If you use this in a project or publication, please cite Exomiser and HPO:
+
 - Smedley D, et al. A Whole-Genome Analysis Framework for Effective Discovery of Pathogenic Variants in Rare Disease. (Exomiser)
 - Köhler S, et al. The Human Phenotype Ontology in 2021. (HPO)
 

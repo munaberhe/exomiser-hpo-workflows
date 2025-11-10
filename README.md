@@ -231,9 +231,4 @@ If you use this in a project or publication, please cite Exomiser and HPO:
 - Smedley D, et al. A Whole-Genome Analysis Framework for Effective Discovery of Pathogenic Variants in Rare Disease. (Exomiser)
 - Köhler S, et al. The Human Phenotype Ontology in 2021. (HPO)
 
-----------------------------------------------------------------
-
-## License
-
-MIT — see LICENSE (or replace with your preferred license).
 

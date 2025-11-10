@@ -127,7 +127,7 @@ env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ----------------------------------------------------------------
 
-## Repository layout
+```## Repository layout
 
 exomiser-hpo-workflows/
 ├── cases/
@@ -151,7 +151,7 @@ exomiser-hpo-workflows/
 ├── run_exomiser_epilepsy.sh              # wrapper for epilepsy job
 ├── .gitignore
 └── README.md
-
+```
 ----------------------------------------------------------------
 
 ## Minimal example job snippets

@@ -248,6 +248,14 @@ outputOptions:
 #   - Ensure your VCF assembly matches --assembly.
 
 ----------------------------------------------------------------
+## Phenopackets demo
+
+Run the pipeline directly from a Phenopacket:
+ 
+export EXOMISER_HOME="$HOME/tools/exomiser"
+tools/run_from_phenopacket.sh phenopackets/case_hcm.json data/case01_hcm.vep.vcf.gz GRCh37
+
+----------------------------------------------------------------
 ## Citation
 
 If you use this in a project or publication, please cite Exomiser and HPO:

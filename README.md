@@ -64,7 +64,7 @@ Each cases/*/exomiser.yml is an Exomiser job that defines:
 
 ----------------------------------------------------------------
 
-## ⚠️ Assembly matters
+##  Assembly matters
 
 - HCM job = GRCh38 VCF
 - Epilepsy job = GRCh37 VCF

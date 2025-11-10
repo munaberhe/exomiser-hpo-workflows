@@ -7,9 +7,11 @@ This repo ships two demo analyses:
 - Epilepsy / neurodevelopment — HP:0001250, HP:0001263, HP:0000252 (expects GRCh37 VCF)
 
 Outputs include a human-friendly HTML report plus TSV (genes & variants) and JSON for downstream use.
+Live Pages (if enabled): 
+- HCM report: https://munaberhe.github.io/exomiser-hpo-workflows/hcm-report.html
+- Epilepsy report: https://munaberhe.github.io/exomiser-hpo-workflows/epilepsy-report.html
 
 ----------------------------------------------------------------
-
 ## Requirements
 
 - Java 17+ (Java 21 tested)
@@ -25,7 +27,6 @@ Outputs include a human-friendly HTML report plus TSV (genes & variants) and JSO
   env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ----------------------------------------------------------------
-
 ## Quickstart
 
 # 1) clone and enter the repo
@@ -46,11 +47,9 @@ open outputs/case01_hcm/*-exomiser.html
 open outputs/case02_epilepsy/*-exomiser.html
 
 ----------------------------------------------------------------
-
 ## What the jobs do
 
 Each cases/*/exomiser.yml is an Exomiser job that defines:
-
 - sample: genomeAssembly, input vcf, and HPO terms
 - preset: EXOME
 - analysis:
@@ -63,7 +62,6 @@ Each cases/*/exomiser.yml is an Exomiser job that defines:
 - outputOptions: write HTML, JSON, TSV_GENE, TSV_VARIANT into outputs/<case>/
 
 ----------------------------------------------------------------
-
 ##  Assembly matters
 
 - HCM job = GRCh38 VCF
@@ -72,7 +70,6 @@ Each cases/*/exomiser.yml is an Exomiser job that defines:
 If your VCF uses another assembly, either liftover the VCF or change genomeAssembly and ensure the corresponding Exomiser data (2406_hg19 or 2406_hg38) are present.
 
 ----------------------------------------------------------------
-
 ## Run manually (without the wrapper scripts)
 
 # HCM (GRCh38)
@@ -84,7 +81,6 @@ java -Xms1g -Xmx6g -jar "$EXOMISER_HOME/exomiser-cli-14.0.1.jar" \
   --job="$(pwd)/cases/case02_epilepsy/exomiser.yml"
 
 ----------------------------------------------------------------
-
 ## Outputs
 
 Each run writes to outputs/<case>/:
@@ -102,7 +98,6 @@ awk -F'\t' 'NR==1 || NR<=11' outputs/case01_hcm/*-exomiser.genes.tsv | column -t
 awk -F'\t' 'NR==1 || NR<=11' outputs/case01_hcm/*-exomiser.variants.tsv | column -t -s $'\t'
 
 ----------------------------------------------------------------
-
 ## Customising
 
 - Change HPO terms in sample.hpoIds to match your phenotype.
@@ -111,7 +106,6 @@ awk -F'\t' 'NR==1 || NR<=11' outputs/case01_hcm/*-exomiser.variants.tsv | column
 - Assembly: ensure sample.genomeAssembly matches the VCF and that Exomiser data for that assembly exist.
 
 ----------------------------------------------------------------
-
 ## Troubleshooting
 
 ### VCF / assembly mismatch
@@ -126,34 +120,52 @@ If you see dyld: Symbol not found: _iconv, call Apple Git explicitly:
 env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ----------------------------------------------------------------
+## Pushing to GitHub (SSH, macOS)
 
-```## Repository layout
+# (once) generate an SSH key and add it to GitHub
+ssh-keygen -t ed25519 -C "your_email@example.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+pbcopy < ~/.ssh/id_ed25519.pub  # paste into GitHub → Settings → SSH and GPG keys
+
+# add remote & push
+git remote add origin git@github.com:munaberhe/exomiser-hpo-workflows.git
+git push -u origin main
+
+# optional: tag a release
+git tag -a v0.1.0 -m "First public demo release"
+git push origin v0.1.0
+
+----------------------------------------------------------------
+## Repository layout
 
 exomiser-hpo-workflows/
-├── cases/
-│   ├── case01_hcm/
-│   │   └── exomiser.yml                  # HCM job (expects GRCh38 VCF)
-│   └── case02_epilepsy/
-│       └── exomiser.yml                  # Epilepsy job (expects GRCh37 VCF)
-├── outputs/
-│   ├── case01_hcm/                       # created after running HCM job
-│   │   ├── case01_hcm.vep-exomiser.html
-│   │   ├── case01_hcm.vep-exomiser.genes.tsv
-│   │   ├── case01_hcm.vep-exomiser.variants.tsv
-│   │   └── case01_hcm.vep-exomiser.json
-│   └── case02_epilepsy/                  # created after running epilepsy job
-├── reports/
-│   └── case02_epilepsy/
-│       ├── phenotype_HP0001250_variants.tsv
-│       ├── scn1a_genes.tsv
-│       └── scn1a_variants.tsv
-├── run_exomiser_hcm.sh                   # wrapper for HCM job
-├── run_exomiser_epilepsy.sh              # wrapper for epilepsy job
-├── .gitignore
-└── README.md
-```
-----------------------------------------------------------------
+├─ cases/
+│  ├─ case01_hcm/
+│  │  └─ exomiser.yml                 # HCM job (GRCh38 VCF expected)
+│  └─ case02_epilepsy/
+│     └─ exomiser.yml                 # Epilepsy job (GRCh37 VCF expected)
+├─ data/                               # (not tracked) place your VCFs here
+│  ├─ case01_hcm.vep.vcf.gz
+│  ├─ case01_hcm.vep.vcf.gz.tbi
+│  ├─ case02_epilepsy.vep.vcf.gz
+│  └─ case02_epilepsy.vep.vcf.gz.tbi
+├─ outputs/
+│  ├─ case01_hcm/                      # Exomiser outputs (HTML/JSON/TSV)
+│  └─ case02_epilepsy/                 # Exomiser outputs (when run)
+├─ docs/                               # GitHub Pages site (optional)
+│  ├─ index.html
+│  ├─ hcm-report.html
+│  └─ epilepsy-report.html
+├─ pipeline/                           # (optional) mini Nextflow wrapper
+│  ├─ main.nf
+│  └─ nextflow.config
+├─ run_exomiser_hcm.sh                 # wrapper for HCM job
+├─ run_exomiser_epilepsy.sh            # wrapper for epilepsy job
+├─ .gitignore
+└─ README.md
 
+----------------------------------------------------------------
 ## Minimal example job snippets
 
 ### HCM (GRCh38)
@@ -223,12 +235,60 @@ outputOptions:
   outputFormats: [HTML, JSON, TSV_GENE, TSV_VARIANT]
 
 ----------------------------------------------------------------
+## (Optional) Nextflow mini-pipeline
 
+# Requirements: Nextflow installed (https://www.nextflow.io), Java 17+, Exomiser 14.x
+# Configure:
+#   - pipeline/nextflow.config: set params.vcf, or pass --vcf on the CLI
+#   - export EXOMISER_HOME="$HOME/tools/exomiser"
+# Run example:
+#   nextflow run pipeline -profile test --hpo HP:0001639,HP:0001671 --assembly GRCh38
+# Notes:
+#   - Ensure params.exomiserJar is set (e.g., params.exomiserJar = "$EXOMISER_HOME/exomiser-cli-14.0.1.jar")
+#   - Ensure your VCF assembly matches --assembly
+
+----------------------------------------------------------------
+## GitHub Pages (optional)
+
+# Copy any generated HTML reports into docs/ and create a small landing page:
+mkdir -p docs
+cp outputs/case01_hcm/*-exomiser.html docs/hcm-report.html 2>/dev/null || true
+cp outputs/case02_epilepsy/*-exomiser.html docs/epilepsy-report.html 2>/dev/null || true
+cat > docs/index.html <<'HTML'
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Exomiser HPO Workflows — Reports</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  </head>
+  <body>
+    <h1>Exomiser HPO Workflows — Reports</h1>
+    <ul>
+      <li><a href="hcm-report.html">HCM report</a></li>
+      <li><a href="epilepsy-report.html">Epilepsy report</a></li>
+    </ul>
+  </body>
+</html>
+HTML
+
+# Commit and push:
+env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git add docs
+env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git commit -m "Add docs/ for GitHub Pages"
+env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git push origin main
+
+# Enable Pages: GitHub → Settings → Pages → Source: 'Deploy from a branch', Branch: 'main', Folder: '/docs'
+# Visit: https://munaberhe.github.io/exomiser-hpo-workflows/
+
+----------------------------------------------------------------
 ## Citation
 
 If you use this in a project or publication, please cite Exomiser and HPO:
-
 - Smedley D, et al. A Whole-Genome Analysis Framework for Effective Discovery of Pathogenic Variants in Rare Disease. (Exomiser)
 - Köhler S, et al. The Human Phenotype Ontology in 2021. (HPO)
 
+----------------------------------------------------------------
+## License
+
+MIT — see LICENSE (or replace with your preferred license).
 

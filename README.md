@@ -235,20 +235,20 @@ outputOptions:
   outputFormats: [HTML, JSON, TSV_GENE, TSV_VARIANT]
 
 ----------------------------------------------------------------
-## (Optional) Nextflow mini-pipeline
+# (Optional) Nextflow mini-pipeline
 
-# Requirements: Nextflow installed (https://www.nextflow.io), Java 17+, Exomiser 14.x
-# Configure:
-#   - pipeline/nextflow.config: set params.vcf, or pass --vcf on the CLI
-#   - export EXOMISER_HOME="$HOME/tools/exomiser"
-# Run example:
-#   nextflow run pipeline -profile test --hpo HP:0001639,HP:0001671 --assembly GRCh38
-# Notes:
-#   - Ensure params.exomiserJar is set (e.g., params.exomiserJar = "$EXOMISER_HOME/exomiser-cli-14.0.1.jar")
-#   - Ensure your VCF assembly matches --assembly.
+- Requirements: Nextflow installed (https://www.nextflow.io), Java 17+, Exomiser 14.x
+- Configure:
+   - pipeline/nextflow.config: set params.vcf, or pass --vcf on the CLI
+   - export EXOMISER_HOME="$HOME/tools/exomiser"
+- Run example:
+   nextflow run pipeline -profile test --hpo HP:0001639,HP:0001671 --assembly GRCh38
+- Notes:
+   - Ensure params.exomiserJar is set (e.g., params.exomiserJar = "$EXOMISER_HOME/exomiser-cli-14.0.1.jar")
+   - Ensure your VCF assembly matches --assembly.
 
 ----------------------------------------------------------------
-## Phenopackets demo
+# Phenopackets demo
 
 Run the pipeline directly from a Phenopacket:
  
@@ -256,7 +256,7 @@ export EXOMISER_HOME="$HOME/tools/exomiser"
 tools/run_from_phenopacket.sh phenopackets/case_hcm.json data/case01_hcm.vep.vcf.gz GRCh37
 
 ----------------------------------------------------------------
-## Citation
+# Citation
 
 If you use this in a project or publication, please cite Exomiser and HPO:
 - Smedley D, et al. A Whole-Genome Analysis Framework for Effective Discovery of Pathogenic Variants in Rare Disease. (Exomiser)

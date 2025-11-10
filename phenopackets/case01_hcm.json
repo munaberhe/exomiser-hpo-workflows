@@ -1,0 +1,8 @@
+{
+  "subject": {"id":"proband"},
+  "phenotypicFeatures": [
+    {"type":{"id":"HP:0001639","label":"Hypertrophic cardiomyopathy"}},
+    {"type":{"id":"HP:0001671","label":"Abnormal cardiac septum morphology"}}
+  ],
+  "metaData": {"created": "2025-11-10"}
+}

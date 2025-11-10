@@ -129,24 +129,28 @@ env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git <args>
 
 ## Repository layout
 
-'''exomiser-hpo-workflows/
-├─ cases/
-│  ├─ case01_hcm/
-│  │  └─ exomiser.yml                 # HCM job (GRCh38 VCF expected)
-│  └─ case02_epilepsy/
-│     └─ exomiser.yml                 # Epilepsy job (GRCh37 VCF expected)
-├─ outputs/
-│  ├─ case01_hcm/                     # Exomiser outputs (HTML/JSON/TSV)
-│  └─ case02_epilepsy/                # Exomiser outputs (when run)
-├─ reports/
-│  └─ case02_epilepsy/
-│     ├─ phenotype_HP0001250_variants.tsv
-│     ├─ scn1a_genes.tsv
-│     └─ scn1a_variants.tsv
-├─ run_exomiser_hcm.sh                # wrapper for HCM job
-├─ run_exomiser_epilepsy.sh           # wrapper for epilepsy job
-├─ .gitignore
-└─ README.md'''
+exomiser-hpo-workflows/
+├── cases/
+│   ├── case01_hcm/
+│   │   └── exomiser.yml                  # HCM job (expects GRCh38 VCF)
+│   └── case02_epilepsy/
+│       └── exomiser.yml                  # Epilepsy job (expects GRCh37 VCF)
+├── outputs/
+│   ├── case01_hcm/                       # created after running HCM job
+│   │   ├── case01_hcm.vep-exomiser.html
+│   │   ├── case01_hcm.vep-exomiser.genes.tsv
+│   │   ├── case01_hcm.vep-exomiser.variants.tsv
+│   │   └── case01_hcm.vep-exomiser.json
+│   └── case02_epilepsy/                  # created after running epilepsy job
+├── reports/
+│   └── case02_epilepsy/
+│       ├── phenotype_HP0001250_variants.tsv
+│       ├── scn1a_genes.tsv
+│       └── scn1a_variants.tsv
+├── run_exomiser_hcm.sh                   # wrapper for HCM job
+├── run_exomiser_epilepsy.sh              # wrapper for epilepsy job
+├── .gitignore
+└── README.md
 
 ----------------------------------------------------------------
 

@@ -139,7 +139,7 @@ git push origin v0.1.0
 ----------------------------------------------------------------
 ## Repository layout
 
-```exomiser-hpo-workflows/
+exomiser-hpo-workflows/
 ├─ cases/
 │  ├─ case01_hcm/
 │  │  └─ exomiser.yml                 # HCM job (GRCh38 VCF expected)

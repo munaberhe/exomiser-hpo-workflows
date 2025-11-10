@@ -1,0 +1,33 @@
+sample:
+  genomeAssembly: GRCh37
+  vcf: /Users/munaberhe/projects/genomics-portfolio/data/case02_epilepsy.vep.vcf.gz
+  hpoIds: ['HP:0001250', 'HP:0001263', 'HP:0000252']   # seizure, GDD, microcephaly
+
+
+analysis:
+  analysisMode: PASS_ONLY
+  inheritanceModes:
+    AUTOSOMAL_DOMINANT: 1.0
+    AUTOSOMAL_RECESSIVE_COMP_HET: 1.0
+    AUTOSOMAL_RECESSIVE_HOM_ALT: 1.0
+
+  frequencySources: [GNOMAD_E_AFR, GNOMAD_E_AMR, GNOMAD_E_EAS, GNOMAD_E_NFE, GNOMAD_E_SAS,
+                     GNOMAD_G_AFR, GNOMAD_G_AMR, GNOMAD_G_EAS, GNOMAD_G_NFE, GNOMAD_G_SAS]
+  pathogenicitySources: [REVEL, MVP, ALPHA_MISSENSE, SPLICE_AI]
+
+  steps:
+    - failedVariantFilter: {}
+    - variantEffectFilter:
+        remove: [INTERGENIC_VARIANT, UPSTREAM_GENE_VARIANT, DOWNSTREAM_GENE_VARIANT,
+                 NON_CODING_TRANSCRIPT_INTRON_VARIANT, CODING_TRANSCRIPT_INTRON_VARIANT,
+                 THREE_PRIME_UTR_EXON_VARIANT, FIVE_PRIME_UTR_EXON_VARIANT]
+    - frequencyFilter: {maxFrequency: 1.0}
+    - pathogenicityFilter: {keepNonPathogenic: true}
+    - inheritanceFilter: {}
+    - omimPrioritiser: {}
+    - hiPhivePrioritiser: {}
+
+outputOptions:
+  outputDirectory: /Users/munaberhe/projects/genomics-portfolio/outputs/case02_epilepsy
+  outputFilename: case02_epilepsy.vep-exomiser
+  outputFormats: [HTML, JSON, TSV_GENE, TSV_VARIANT]

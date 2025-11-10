@@ -1,0 +1,24 @@
+# OS/editor cruft
+.DS_Store
+*.swp
+*.swo
+
+# Python envs
+.venv/
+venv/
+.env/
+__pycache__/
+
+# Java/Exomiser cache (if any)
+*.log
+
+# Data & results (keep repo slim)
+data/
+outputs/
+
+# Allow tiny example VCFs if you want — comment out the 'data/' rule above and use:
+# data/*.vcf.gz
+# data/*.vcf.gz.tbi
+
+# Jupyter caches
+.ipynb_checkpoints/

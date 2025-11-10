@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it as below."
+title: "exomiser-hpo-workflows"
+authors:
+  - family-names: "Berhe"
+    given-names: "Muna"
+  - name: "Contributors"
+version: "0.1.0"
+date-released: "2025-11-10"
+repository-code: "https://github.com/munaberhe/exomiser-hpo-workflows"
+keywords: [Exomiser, HPO, VCF, genomics, rare-disease, workflow]
+license: MIT

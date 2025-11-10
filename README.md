@@ -62,7 +62,7 @@ Each cases/*/exomiser.yml is an Exomiser job that defines:
 - outputOptions: write HTML, JSON, TSV_GENE, TSV_VARIANT into outputs/<case>/
 
 ----------------------------------------------------------------
-## ⚠️ Assembly matters
+##  Assembly matters
 
 - HCM job = GRCh38 VCF
 - Epilepsy job = GRCh37 VCF
@@ -245,40 +245,7 @@ outputOptions:
 #   nextflow run pipeline -profile test --hpo HP:0001639,HP:0001671 --assembly GRCh38
 # Notes:
 #   - Ensure params.exomiserJar is set (e.g., params.exomiserJar = "$EXOMISER_HOME/exomiser-cli-14.0.1.jar")
-#   - Ensure your VCF assembly matches --assembly
-
-----------------------------------------------------------------
-## GitHub Pages (optional)
-
-# Copy any generated HTML reports into docs/ and create a small landing page:
-mkdir -p docs
-cp outputs/case01_hcm/*-exomiser.html docs/hcm-report.html 2>/dev/null || true
-cp outputs/case02_epilepsy/*-exomiser.html docs/epilepsy-report.html 2>/dev/null || true
-cat > docs/index.html <<'HTML'
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Exomiser HPO Workflows — Reports</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-  </head>
-  <body>
-    <h1>Exomiser HPO Workflows — Reports</h1>
-    <ul>
-      <li><a href="hcm-report.html">HCM report</a></li>
-      <li><a href="epilepsy-report.html">Epilepsy report</a></li>
-    </ul>
-  </body>
-</html>
-HTML
-
-# Commit and push:
-env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git add docs
-env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git commit -m "Add docs/ for GitHub Pages"
-env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH /usr/bin/git push origin main
-
-# Enable Pages: GitHub → Settings → Pages → Source: 'Deploy from a branch', Branch: 'main', Folder: '/docs'
-# Visit: https://munaberhe.github.io/exomiser-hpo-workflows/
+#   - Ensure your VCF assembly matches --assembly.
 
 ----------------------------------------------------------------
 ## Citation

@@ -1,0 +1,21 @@
+Nov-10 18:18:58.880 [main] DEBUG nextflow.cli.Launcher - $> nextflow run pipeline -profile demo
+Nov-10 18:18:58.918 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.0
+Nov-10 18:18:59.109 [main] DEBUG nextflow.config.ConfigBuilder - Found config base: /Users/munaberhe/projects/genomics-portfolio/pipeline/nextflow.config
+Nov-10 18:18:59.110 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/munaberhe/projects/genomics-portfolio/pipeline/nextflow.config
+Nov-10 18:18:59.115 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `demo`
+Nov-10 18:18:59.137 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [test]
+Nov-10 18:18:59.145 [main] DEBUG nextflow.cli.Launcher - Operation aborted
+nextflow.exception.AbortOperationException: Unknown configuration profile: 'demo'
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.config.ConfigBuilder.checkValidProfile(ConfigBuilder.groovy:533)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.config.ConfigBuilder.buildConfig0(ConfigBuilder.groovy:407)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.config.ConfigBuilder.buildGivenFiles(ConfigBuilder.groovy:336)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.config.ConfigBuilder.buildConfigObject(ConfigBuilder.groovy:833)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.config.ConfigBuilder.build(ConfigBuilder.groovy:846)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:358)
+	at nextflow.cli.Launcher.run(Launcher.groovy:515)
+	at nextflow.cli.Launcher.main(Launcher.groovy:675)

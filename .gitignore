@@ -22,3 +22,7 @@ outputs/
 
 # Jupyter caches
 .ipynb_checkpoints/
+
+# Nextflow runtime
+.nextflow*
+work/

@@ -26,3 +26,7 @@ outputs/
 # Nextflow runtime
 .nextflow*
 work/
+
+# Nextflow runtime
+.nextflow*
+work/

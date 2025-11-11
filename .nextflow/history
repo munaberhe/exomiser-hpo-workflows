@@ -1,7 +1,0 @@
-2025-11-10 17:54:37	-	prickly_goodall	-	e7324f7130594581f603c7284a7716d3	989ed512-e4be-453f-bfa4-141a24cfe6b1	nextflow run pipeline -profile test --hpo 'HP:0001639,HP:0001671' --assembly GRCh38
-2025-11-10 17:58:03	1.4s	drunk_gates	OK	49435b934b628cab01fcfbd3ddc0a6e9	19f01f1b-6d3d-45c7-a8f2-cddd036d1544	nextflow run pipeline -profile test --hpo 'HP:0001639,HP:0001671' --assembly GRCh37
-2025-11-10 18:15:47	1.1s	astonishing_easley	OK	49435b934b628cab01fcfbd3ddc0a6e9	feed730e-21d4-48eb-89f8-528b88fe0e85	nextflow run pipeline -profile test
-2025-11-10 18:16:35	594ms	lonely_swirles	OK	49435b934b628cab01fcfbd3ddc0a6e9	82ceb027-5dcb-400c-9150-6661746750da	nextflow run pipeline -profile test --assembly GRCh37
-2025-11-10 18:22:24	-	pedantic_venter	-	49435b934b628cab01fcfbd3ddc0a6e9	14835a4b-500f-4322-832e-87d56e225e69	nextflow run pipeline -profile demo
-2025-11-10 18:35:30	1.4s	zen_cray	OK	49435b934b628cab01fcfbd3ddc0a6e9	a6914fc6-64ca-4046-9211-df328e2b9851	nextflow run pipeline -profile test
-2025-11-10 18:42:46	1.1s	suspicious_hugle	OK	49435b934b628cab01fcfbd3ddc0a6e9	a3bdb077-2972-455b-a1a0-3249947ef94a	nextflow run pipeline --vcf data/case01_hcm.vep.vcf.gz --hpo 'HP:0001639,HP:0001671' --assembly GRCh37 --outdir outputs/pipeline/case_hcm
